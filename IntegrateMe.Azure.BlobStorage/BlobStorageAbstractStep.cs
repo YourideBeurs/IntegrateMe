@@ -1,4 +1,5 @@
-﻿using IntegrateMe.Core;
+﻿using Azure.Storage.Blobs;
+using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.BlobStorage;
 
@@ -26,13 +27,51 @@ public class BlobStorageAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public BlobStorageAbstractStep UploadBlob(string blobName, byte[] data)
+    public BlobStorageAbstractStep UploadBlob(string blobName, string data)
     {
+        MainDsl.AddAction(async () =>
+        {
+            var container = new BlobContainerClient(_connectionString, _containerName);
+            var blobClient = container.GetBlobClient(blobName);
+            await blobClient.UploadAsync(data);
+        });
         return this;
     }
 
-    public BlobStorageAbstractStep BlobExists(string blobName)
+    public BlobStorageAbstractStep UploadBlob(string blobName, Stream data)
     {
+        MainDsl.AddAction(async () =>
+        {
+            var container = new BlobContainerClient(_connectionString, _containerName);
+            var blobClient = container.GetBlobClient(blobName);
+            await blobClient.UploadAsync(data);
+        });
+        return this;
+    }
+
+    public BlobStorageAbstractStep BlobExists(string blobName, bool exists = true)
+    {
+        MainDsl.AddAction(async () =>
+        {
+            var container = new BlobContainerClient(_connectionString, _containerName);
+            var blobClient = container.GetBlobClient(blobName);
+            var response = await blobClient.ExistsAsync();
+            if (response.Value != exists)
+            {
+                throw new Exception($"Blob {blobName} exists: {response.Value} but expected {exists}");
+            }
+        });
+        return this;
+    }
+
+    public BlobStorageAbstractStep DeleteBlob(string blobName)
+    {
+        MainDsl.AddAction(async () =>
+        {
+            var container = new BlobContainerClient(_connectionString, _containerName);
+            var blobClient = container.GetBlobClient(blobName);
+            await blobClient.DeleteIfExistsAsync();
+        });
         return this;
     }
 
