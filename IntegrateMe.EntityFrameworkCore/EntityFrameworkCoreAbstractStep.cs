@@ -3,16 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IntegrateMe.EntityFramework.Core;
 
-public class EntityFrameworkCoreAbstractStep : AbstractStep
+public class EntityFrameworkCoreAbstractStep(AbstractStep parent) : AbstractStep(parent)
 {
-    private readonly AbstractStep _parent;
-
-    public EntityFrameworkCoreAbstractStep(AbstractStep parent) : base(parent)
-    {
-        _parent = parent;
-    }
-
-    private DbContext _dbContext;
+    private DbContext? _dbContext;
 
     public EntityFrameworkCoreAbstractStep DbContext(DbContext dbContext)
     {
@@ -20,15 +13,24 @@ public class EntityFrameworkCoreAbstractStep : AbstractStep
         return this;
     }
 
-
     public EntityFrameworkCoreAbstractStep Custom(Func<DbContext, Task> action)
     {
+        if (_dbContext == null)
+        {
+            throw new InvalidOperationException("DbContext is not set");
+        }
+
         MainDsl.AddAction(async () => await action.Invoke(_dbContext));
         return this;
     }
 
     public EntityFrameworkCoreAbstractStep Custom<T>(Func<T, Task> action) where T : class
     {
+        if (_dbContext == null)
+        {
+            throw new InvalidOperationException("DbContext is not set");
+        }
+
         MainDsl.AddAction(async () => await action.Invoke(_dbContext as T ?? throw new InvalidOperationException()));
         return this;
     }

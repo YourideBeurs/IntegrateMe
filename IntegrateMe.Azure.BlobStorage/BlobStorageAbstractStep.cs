@@ -2,17 +2,11 @@
 
 namespace IntegrateMe.Azure.BlobStorage;
 
-public class BlobStorageAbstractStep : AbstractStep
+public class BlobStorageAbstractStep(AbstractStep parent) : AbstractStep(parent)
 {
     private string? _connectionString;
     private string? _containerName;
     private string? _sasToken;
-    private readonly AbstractStep _parent;
-
-    public BlobStorageAbstractStep(AbstractStep parent) : base(parent)
-    {
-        _parent = parent;
-    }
 
     public BlobStorageAbstractStep ConnectionString(string connectionString)
     {

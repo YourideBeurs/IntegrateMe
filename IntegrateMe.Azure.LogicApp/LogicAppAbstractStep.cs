@@ -8,21 +8,14 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.LogicApp;
 
-public class LogicAppAbstractStep : AbstractStep
+public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
 {
-    private readonly ArmClient _armClient;
-    private readonly AbstractStep _parent;
+    private readonly ArmClient _armClient = new(new DefaultAzureCredential());
     private string? _resourceGroup;
     private string? _name;
     private string? _subscriptionId;
     private int _runCount;
     private bool _prepared;
-
-    public LogicAppAbstractStep(AbstractStep parent) : base(parent)
-    {
-        _parent = parent;
-        _armClient = new(new DefaultAzureCredential());
-    }
 
     public LogicAppAbstractStep Name(string name)
     {

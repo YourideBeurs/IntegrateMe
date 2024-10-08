@@ -10,20 +10,13 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.ContainerRegistry;
 
-public class ContainerRegistryAbstractStep : AbstractStep, IContainerRegistry
+public class ContainerRegistryAbstractStep(AbstractStep parent) : AbstractStep(parent), IContainerRegistry
 {
-    private readonly AbstractStep _parent;
+    private readonly ArmClient _armClient = new(new DefaultAzureCredential());
     private string? _subscriptionId;
     private string? _resourceGroup;
     private string? _repository;
     private string? _name;
-    private readonly ArmClient _armClient;
-
-    public ContainerRegistryAbstractStep(AbstractStep parent) : base(parent)
-    {
-        _parent = parent;
-        _armClient = new(new DefaultAzureCredential());
-    }
 
     public ContainerRegistryAbstractStep SubscriptionId(string subscriptionId)
     {

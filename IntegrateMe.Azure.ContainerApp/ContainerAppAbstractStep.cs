@@ -8,23 +8,16 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.ContainerApp;
 
-public class ContainerAppAbstractStep : AbstractStep
+public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
 {
-    private readonly AbstractStep _parent;
-    private readonly ArmClient _armClient;
+    private readonly ArmClient _armClient = new(new DefaultAzureCredential());
+    private readonly Dictionary<string, string> _secrets = new();
     private string? _suffix;
     private string? _tag;
     private string? _subscriptionId;
     private string? _repository;
     private string? _resourceGroup;
     private string? _name;
-    private readonly Dictionary<string, string> _secrets = new();
-
-    public ContainerAppAbstractStep(AbstractStep parent) : base(parent)
-    {
-        _parent = parent;
-        _armClient = new(new DefaultAzureCredential());
-    }
 
     public ContainerAppAbstractStep RandomSuffix()
     {
