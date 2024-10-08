@@ -4,7 +4,7 @@ namespace IntegrateMe.EntityFramework.Core;
 
 public static class EntityFrameworkCoreContext
 {
-    public static EntityFrameworkCoreAbstractStep EntityFramework(this AbstractStep parent, string? name = null)
+    public static EntityFrameworkCoreStep EntityFramework(this AbstractStep parent, string? name = null)
     {
         if (name == null)
         {
@@ -14,7 +14,7 @@ public static class EntityFrameworkCoreContext
         {
             if (parent.MainDsl.Entities.TryGetValue(name, out var step))
             {
-                if (step is not EntityFrameworkCoreAbstractStep entityFrameworkCoreStep)
+                if (step is not EntityFrameworkCoreStep entityFrameworkCoreStep)
                 {
                     throw new InvalidOperationException();
                 }
@@ -23,7 +23,7 @@ public static class EntityFrameworkCoreContext
             }
         }
 
-        var next = new EntityFrameworkCoreAbstractStep(parent);
+        var next = new EntityFrameworkCoreStep(parent);
         parent.MainDsl.Entities.Add(name, next);
         return next;
     }

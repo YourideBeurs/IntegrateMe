@@ -8,7 +8,7 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.LogicApp;
 
-public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
+public class LogicAppStep(AbstractStep parent) : AbstractStep(parent)
 {
     private readonly ArmClient _armClient = new(new DefaultAzureCredential());
     private string? _resourceGroup;
@@ -17,7 +17,7 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
     private int _runCount;
     private bool _prepared;
 
-    public LogicAppAbstractStep Name(string name)
+    public LogicAppStep Name(string name)
     {
         if (MainDsl.Verbose)
         {
@@ -28,7 +28,7 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public LogicAppAbstractStep ResourceGroup(string resourceGroup)
+    public LogicAppStep ResourceGroup(string resourceGroup)
     {
         if (MainDsl.Verbose)
         {
@@ -39,13 +39,13 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public LogicAppAbstractStep DisableListening()
+    public LogicAppStep DisableListening()
     {
         _prepared = true;
         return this;
     }
 
-    public LogicAppAbstractStep SubscriptionId(string subscriptionId)
+    public LogicAppStep SubscriptionId(string subscriptionId)
     {
         if (MainDsl.Verbose)
         {
@@ -56,12 +56,12 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public LogicAppAbstractStep Trigger()
+    public LogicAppStep Trigger()
     {
         throw new NotImplementedException();
     }
 
-    public LogicAppAbstractStep Enable()
+    public LogicAppStep Enable()
     {
         MainDsl.AddAction(async () =>
         {
@@ -85,7 +85,7 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public LogicAppAbstractStep Disable()
+    public LogicAppStep Disable()
     {
         MainDsl.AddAction(async () =>
         {
@@ -109,7 +109,7 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public LogicAppAbstractStep IsEnabled()
+    public LogicAppStep IsEnabled()
     {
         MainDsl.AddAction(async () =>
         {
@@ -137,7 +137,7 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public LogicAppAbstractStep IsDisabled()
+    public LogicAppStep IsDisabled()
     {
         MainDsl.AddAction(async () =>
         {
@@ -186,7 +186,7 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
         _runCount = runCount;
     }
 
-    public LogicAppAbstractStep WaitForRun(int runs = 1, int millisecondsDelay = 5000, int retries = 5)
+    public LogicAppStep WaitForRun(int runs = 1, int millisecondsDelay = 5000, int retries = 5)
     {
         // TODO: Implement waiting for multiple runs
         MainDsl.AddAction(async () =>
@@ -230,17 +230,17 @@ public class LogicAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public LogicAppAbstractStep Custom(Action action)
+    public LogicAppStep Custom(Action action)
     {
         throw new NotImplementedException();
     }
 
-    public LogicAppAbstractStep Custom<T>(Func<T> action)
+    public LogicAppStep Custom<T>(Func<T> action)
     {
         throw new NotImplementedException();
     }
 
-    public LogicAppAbstractStep Custom(Action<LogicAppAbstractStep> action)
+    public LogicAppStep Custom(Action<LogicAppStep> action)
     {
         throw new NotImplementedException();
     }

@@ -8,7 +8,7 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.ContainerApp;
 
-public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent)
+public class ContainerAppStep(AbstractStep parent) : AbstractStep(parent)
 {
     private readonly ArmClient _armClient = new(new DefaultAzureCredential());
     private readonly Dictionary<string, string> _secrets = new();
@@ -19,7 +19,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
     private string? _resourceGroup;
     private string? _name;
 
-    public ContainerAppAbstractStep RandomSuffix()
+    public ContainerAppStep RandomSuffix()
     {
         var rand = new Random();
 
@@ -47,7 +47,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep Tag(string tag)
+    public ContainerAppStep Tag(string tag)
     {
         if (MainDsl.Verbose)
         {
@@ -58,7 +58,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep Tag(Func<AbstractStep, string> action)
+    public ContainerAppStep Tag(Func<AbstractStep, string> action)
     {
         if (MainDsl.Verbose)
         {
@@ -70,7 +70,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep SubscriptionId(string subscriptionId)
+    public ContainerAppStep SubscriptionId(string subscriptionId)
     {
         if (MainDsl.Verbose)
         {
@@ -81,7 +81,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep Secret(string name, string value)
+    public ContainerAppStep Secret(string name, string value)
     {
         if (MainDsl.Verbose)
         {
@@ -92,7 +92,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep ResourceGroup(string resourceGroup)
+    public ContainerAppStep ResourceGroup(string resourceGroup)
     {
         if (MainDsl.Verbose)
         {
@@ -105,7 +105,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
     }
 
 
-    public ContainerAppAbstractStep Name(string name)
+    public ContainerAppStep Name(string name)
     {
         if (MainDsl.Verbose)
         {
@@ -117,7 +117,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep CreateNewRevision()
+    public ContainerAppStep CreateNewRevision()
     {
         MainDsl.AddAction(async () =>
         {
@@ -168,7 +168,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep Start()
+    public ContainerAppStep Start()
     {
         MainDsl.AddAction(async () =>
         {
@@ -197,7 +197,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep Stop()
+    public ContainerAppStep Stop()
     {
         MainDsl.AddAction(async () =>
         {
@@ -224,7 +224,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep Call(Func<string, Task> action)
+    public ContainerAppStep Call(Func<string, Task> action)
     {
         MainDsl.AddAction(async () =>
         {
@@ -250,7 +250,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep Repository(string repository)
+    public ContainerAppStep Repository(string repository)
     {
         if (MainDsl.Verbose)
         {
@@ -261,7 +261,7 @@ public class ContainerAppAbstractStep(AbstractStep parent) : AbstractStep(parent
         return this;
     }
 
-    public ContainerAppAbstractStep Repository(Func<AbstractStep, IContainerRegistry> action)
+    public ContainerAppStep Repository(Func<AbstractStep, IContainerRegistry> action)
     {
         if (MainDsl.Verbose)
         {

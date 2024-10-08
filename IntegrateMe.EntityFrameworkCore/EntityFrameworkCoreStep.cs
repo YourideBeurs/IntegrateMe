@@ -3,17 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IntegrateMe.EntityFramework.Core;
 
-public class EntityFrameworkCoreAbstractStep(AbstractStep parent) : AbstractStep(parent)
+public class EntityFrameworkCoreStep(AbstractStep parent) : AbstractStep(parent)
 {
     private DbContext? _dbContext;
 
-    public EntityFrameworkCoreAbstractStep DbContext(DbContext dbContext)
+    public EntityFrameworkCoreStep DbContext(DbContext dbContext)
     {
         _dbContext = dbContext;
         return this;
     }
 
-    public EntityFrameworkCoreAbstractStep Custom(Func<DbContext, Task> action)
+    public EntityFrameworkCoreStep Custom(Func<DbContext, Task> action)
     {
         if (_dbContext == null)
         {
@@ -24,7 +24,7 @@ public class EntityFrameworkCoreAbstractStep(AbstractStep parent) : AbstractStep
         return this;
     }
 
-    public EntityFrameworkCoreAbstractStep Custom<T>(Func<T, Task> action) where T : class
+    public EntityFrameworkCoreStep Custom<T>(Func<T, Task> action) where T : class
     {
         if (_dbContext == null)
         {

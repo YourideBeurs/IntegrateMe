@@ -10,7 +10,7 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.ContainerRegistry;
 
-public class ContainerRegistryAbstractStep(AbstractStep parent) : AbstractStep(parent), IContainerRegistry
+public class ContainerRegistryStep(AbstractStep parent) : AbstractStep(parent), IContainerRegistry
 {
     private readonly ArmClient _armClient = new(new DefaultAzureCredential());
     private string? _subscriptionId;
@@ -18,25 +18,25 @@ public class ContainerRegistryAbstractStep(AbstractStep parent) : AbstractStep(p
     private string? _repository;
     private string? _name;
 
-    public ContainerRegistryAbstractStep SubscriptionId(string subscriptionId)
+    public ContainerRegistryStep SubscriptionId(string subscriptionId)
     {
         _subscriptionId = subscriptionId;
         return this;
     }
 
-    public ContainerRegistryAbstractStep ResourceGroup(string resourceGroup)
+    public ContainerRegistryStep ResourceGroup(string resourceGroup)
     {
         _resourceGroup = resourceGroup;
         return this;
     }
 
-    public ContainerRegistryAbstractStep Name(string name)
+    public ContainerRegistryStep Name(string name)
     {
         _name = name;
         return this;
     }
 
-    public ContainerRegistryAbstractStep Repository(string repository)
+    public ContainerRegistryStep Repository(string repository)
     {
         _repository = repository;
         return this;
@@ -47,7 +47,7 @@ public class ContainerRegistryAbstractStep(AbstractStep parent) : AbstractStep(p
         return $"{_name}.azurecr.io/{_repository}";
     }
 
-    public ContainerRegistryAbstractStep Publish()
+    public ContainerRegistryStep Publish()
     {
         MainDsl.AddAction(async () =>
         {

@@ -4,7 +4,7 @@ namespace IntegrateMe.Azure.LogicApp;
 
 public static class LogicAppContext
 {
-    public static LogicAppAbstractStep LogicApp(this AbstractStep parent, string? name = null)
+    public static LogicAppStep LogicApp(this AbstractStep parent, string? name = null)
     {
         if (name == null)
         {
@@ -14,7 +14,7 @@ public static class LogicAppContext
         {
             if (parent.MainDsl.Entities.TryGetValue(name, out var step))
             {
-                if (step is not LogicAppAbstractStep logicAppStep)
+                if (step is not LogicAppStep logicAppStep)
                 {
                     throw new InvalidOperationException();
                 }
@@ -23,7 +23,7 @@ public static class LogicAppContext
             }
         }
 
-        var next = new LogicAppAbstractStep(parent);
+        var next = new LogicAppStep(parent);
         parent.MainDsl.Entities.Add(name, next);
         return next;
     }

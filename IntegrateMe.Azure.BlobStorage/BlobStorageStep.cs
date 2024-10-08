@@ -3,31 +3,31 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.BlobStorage;
 
-public class BlobStorageAbstractStep(AbstractStep parent) : AbstractStep(parent)
+public class BlobStorageStep(AbstractStep parent) : AbstractStep(parent)
 {
     private string? _connectionString;
     private string? _containerName;
     private string? _sasToken;
 
-    public BlobStorageAbstractStep ConnectionString(string connectionString)
+    public BlobStorageStep ConnectionString(string connectionString)
     {
         _connectionString = connectionString;
         return this;
     }
 
-    public BlobStorageAbstractStep SasToken(string sasToken)
+    public BlobStorageStep SasToken(string sasToken)
     {
         _sasToken = sasToken;
         return this;
     }
 
-    public BlobStorageAbstractStep ContainerName(string containerName)
+    public BlobStorageStep ContainerName(string containerName)
     {
         _containerName = containerName;
         return this;
     }
 
-    public BlobStorageAbstractStep UploadBlob(string blobName, string data)
+    public BlobStorageStep UploadBlob(string blobName, string data)
     {
         MainDsl.AddAction(async () =>
         {
@@ -38,7 +38,7 @@ public class BlobStorageAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public BlobStorageAbstractStep UploadBlob(string blobName, Stream data)
+    public BlobStorageStep UploadBlob(string blobName, Stream data)
     {
         MainDsl.AddAction(async () =>
         {
@@ -49,7 +49,7 @@ public class BlobStorageAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public BlobStorageAbstractStep BlobExists(string blobName, bool exists = true)
+    public BlobStorageStep BlobExists(string blobName, bool exists = true)
     {
         MainDsl.AddAction(async () =>
         {
@@ -64,7 +64,7 @@ public class BlobStorageAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public BlobStorageAbstractStep DeleteBlob(string blobName)
+    public BlobStorageStep DeleteBlob(string blobName)
     {
         MainDsl.AddAction(async () =>
         {
@@ -75,17 +75,17 @@ public class BlobStorageAbstractStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public BlobStorageAbstractStep Custom(Action action)
+    public BlobStorageStep Custom(Action action)
     {
         return this;
     }
 
-    public BlobStorageAbstractStep Custom<T>(Func<T> action)
+    public BlobStorageStep Custom<T>(Func<T> action)
     {
         return this;
     }
 
-    public BlobStorageAbstractStep Custom(Action<BlobStorageAbstractStep> action)
+    public BlobStorageStep Custom(Action<BlobStorageStep> action)
     {
         return this;
     }
