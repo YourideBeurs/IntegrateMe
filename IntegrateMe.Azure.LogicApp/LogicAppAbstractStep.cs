@@ -8,25 +8,23 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.LogicApp;
 
-public class LogicAppStep : IStep
+public class LogicAppAbstractStep : AbstractStep
 {
     private readonly ArmClient _armClient;
-    private readonly IStep _parent;
+    private readonly AbstractStep _parent;
     private string? _resourceGroup;
     private string? _name;
-    private readonly List<Func<Task>> _actions = [];
     private string? _subscriptionId;
     private int _runCount;
     private bool _prepared;
-    public Dsl MainDsl => _parent.MainDsl;
 
-    public LogicAppStep(IStep parent)
+    public LogicAppAbstractStep(AbstractStep parent) : base(parent)
     {
         _parent = parent;
         _armClient = new(new DefaultAzureCredential());
     }
 
-    public LogicAppStep Name(string name)
+    public LogicAppAbstractStep Name(string name)
     {
         if (MainDsl.Verbose)
         {
@@ -37,7 +35,7 @@ public class LogicAppStep : IStep
         return this;
     }
 
-    public LogicAppStep ResourceGroup(string resourceGroup)
+    public LogicAppAbstractStep ResourceGroup(string resourceGroup)
     {
         if (MainDsl.Verbose)
         {
@@ -48,23 +46,13 @@ public class LogicAppStep : IStep
         return this;
     }
 
-    public IStep When()
-    {
-        return this;
-    }
-
-    public IStep Then()
-    {
-        return this;
-    }
-
-    public LogicAppStep DisableListening()
+    public LogicAppAbstractStep DisableListening()
     {
         _prepared = true;
         return this;
     }
 
-    public LogicAppStep SubscriptionId(string subscriptionId)
+    public LogicAppAbstractStep SubscriptionId(string subscriptionId)
     {
         if (MainDsl.Verbose)
         {
@@ -75,45 +63,14 @@ public class LogicAppStep : IStep
         return this;
     }
 
-    public async Task RunAsync()
-    {
-        await SetupAsync();
-        await _parent.SetupAsync();
-        foreach (var action in _actions)
-        {
-            await action.Invoke();
-        }
-
-        await _parent.RunAsync();
-
-        await TearDownAsync();
-        await _parent.TearDownAsync();
-    }
-
-    public async Task SetupAsync()
-    {
-        if (!_prepared)
-        {
-            await ListenAsync();
-            _prepared = true;
-        }
-
-        await _parent.SetupAsync();
-    }
-
-    public async Task TearDownAsync()
-    {
-        await _parent.TearDownAsync();
-    }
-
-    public LogicAppStep Trigger()
+    public LogicAppAbstractStep Trigger()
     {
         throw new NotImplementedException();
     }
 
-    public LogicAppStep Enable()
+    public LogicAppAbstractStep Enable()
     {
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             if (MainDsl.Verbose)
             {
@@ -135,9 +92,9 @@ public class LogicAppStep : IStep
         return this;
     }
 
-    public LogicAppStep Disable()
+    public LogicAppAbstractStep Disable()
     {
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             if (MainDsl.Verbose)
             {
@@ -159,9 +116,9 @@ public class LogicAppStep : IStep
         return this;
     }
 
-    public LogicAppStep IsEnabled()
+    public LogicAppAbstractStep IsEnabled()
     {
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             if (MainDsl.Verbose)
             {
@@ -187,9 +144,9 @@ public class LogicAppStep : IStep
         return this;
     }
 
-    public LogicAppStep IsDisabled()
+    public LogicAppAbstractStep IsDisabled()
     {
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             if (MainDsl.Verbose)
             {
@@ -215,16 +172,6 @@ public class LogicAppStep : IStep
         return this;
     }
 
-    public T Get<T>(string key)
-    {
-        return MainDsl.Get<T>(key);
-    }
-
-    private async Task ValidateAsync()
-    {
-        await Task.CompletedTask;
-    }
-
     public async Task ListenAsync()
     {
         var subscription =
@@ -246,10 +193,10 @@ public class LogicAppStep : IStep
         _runCount = runCount;
     }
 
-    public LogicAppStep WaitForRun(int runs = 1, int millisecondsDelay = 5000, int retries = 5)
+    public LogicAppAbstractStep WaitForRun(int runs = 1, int millisecondsDelay = 5000, int retries = 5)
     {
         // TODO: Implement waiting for multiple runs
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             if (MainDsl.Verbose)
             {
@@ -290,18 +237,18 @@ public class LogicAppStep : IStep
         return this;
     }
 
-    public LogicAppStep Custom(Action action)
+    public LogicAppAbstractStep Custom(Action action)
     {
-        return this;
+        throw new NotImplementedException();
     }
 
-    public LogicAppStep Custom<T>(Func<T> action)
+    public LogicAppAbstractStep Custom<T>(Func<T> action)
     {
-        return this;
+        throw new NotImplementedException();
     }
 
-    public LogicAppStep Custom(Action<LogicAppStep> action)
+    public LogicAppAbstractStep Custom(Action<LogicAppAbstractStep> action)
     {
-        return this;
+        throw new NotImplementedException();
     }
 }

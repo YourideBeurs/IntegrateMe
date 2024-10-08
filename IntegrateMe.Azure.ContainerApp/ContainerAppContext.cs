@@ -4,12 +4,12 @@ namespace IntegrateMe.Azure.ContainerApp;
 
 public static class ContainerAppContext
 {
-    public static ContainerAppStep ContainerApp(this IStep parent, string? name = null)
+    public static ContainerAppAbstractStep ContainerApp(this AbstractStep parent, string? name = null)
     {
-        if (name == null) return new ContainerAppStep(parent);
+        if (name == null) return new ContainerAppAbstractStep(parent);
         if (parent.MainDsl.Entities.TryGetValue(name, out var step))
         {
-            if (step is not ContainerAppStep containerAppStep)
+            if (step is not ContainerAppAbstractStep containerAppStep)
             {
                 throw new InvalidOperationException();
             }
@@ -17,7 +17,7 @@ public static class ContainerAppContext
             return containerAppStep;
         }
 
-        var next = new ContainerAppStep(parent);
+        var next = new ContainerAppAbstractStep(parent);
         parent.MainDsl.Entities.Add(name, next);
         return next;
     }

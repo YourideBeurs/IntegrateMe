@@ -8,27 +8,25 @@ using IntegrateMe.Core;
 
 namespace IntegrateMe.Azure.ContainerApp;
 
-public class ContainerAppStep : IStep
+public class ContainerAppAbstractStep : AbstractStep
 {
-    private readonly IStep _parent;
+    private readonly AbstractStep _parent;
     private readonly ArmClient _armClient;
     private string? _suffix;
     private string? _tag;
     private string? _subscriptionId;
     private string? _repository;
     private string? _resourceGroup;
+    private string? _name;
     private readonly Dictionary<string, string> _secrets = new();
 
-    private readonly List<Func<Task>> _actions = [];
-    private string? _name;
-
-    public ContainerAppStep(IStep parent)
+    public ContainerAppAbstractStep(AbstractStep parent) : base(parent)
     {
         _parent = parent;
         _armClient = new(new DefaultAzureCredential());
     }
 
-    public ContainerAppStep RandomSuffix()
+    public ContainerAppAbstractStep RandomSuffix()
     {
         var rand = new Random();
 
@@ -56,7 +54,7 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep Tag(string tag)
+    public ContainerAppAbstractStep Tag(string tag)
     {
         if (MainDsl.Verbose)
         {
@@ -67,7 +65,7 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep Tag(Func<IStep, string> action)
+    public ContainerAppAbstractStep Tag(Func<AbstractStep, string> action)
     {
         if (MainDsl.Verbose)
         {
@@ -79,7 +77,7 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep SubscriptionId(string subscriptionId)
+    public ContainerAppAbstractStep SubscriptionId(string subscriptionId)
     {
         if (MainDsl.Verbose)
         {
@@ -90,7 +88,7 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep Secret(string name, string value)
+    public ContainerAppAbstractStep Secret(string name, string value)
     {
         if (MainDsl.Verbose)
         {
@@ -101,7 +99,7 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep ResourceGroup(string resourceGroup)
+    public ContainerAppAbstractStep ResourceGroup(string resourceGroup)
     {
         if (MainDsl.Verbose)
         {
@@ -114,7 +112,7 @@ public class ContainerAppStep : IStep
     }
 
 
-    public ContainerAppStep Name(string name)
+    public ContainerAppAbstractStep Name(string name)
     {
         if (MainDsl.Verbose)
         {
@@ -126,9 +124,9 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep CreateNewRevision()
+    public ContainerAppAbstractStep CreateNewRevision()
     {
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             ValidateStep();
 
@@ -177,21 +175,9 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public Dsl MainDsl => _parent.MainDsl;
-
-    public IStep When()
+    public ContainerAppAbstractStep Start()
     {
-        return this;
-    }
-
-    public IStep Then()
-    {
-        return this;
-    }
-
-    public ContainerAppStep Start()
-    {
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             if (MainDsl.Verbose)
             {
@@ -218,9 +204,9 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep Stop()
+    public ContainerAppAbstractStep Stop()
     {
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             if (MainDsl.Verbose)
             {
@@ -245,9 +231,9 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep Call(Func<string, Task> action)
+    public ContainerAppAbstractStep Call(Func<string, Task> action)
     {
-        _actions.Add(async () =>
+        MainDsl.AddAction(async () =>
         {
             var subscription =
                 _armClient.GetSubscriptionResource(new ResourceIdentifier($"/subscriptions/{_subscriptionId}"));
@@ -270,8 +256,8 @@ public class ContainerAppStep : IStep
 
         return this;
     }
-    
-    public ContainerAppStep Repository(string repository)
+
+    public ContainerAppAbstractStep Repository(string repository)
     {
         if (MainDsl.Verbose)
         {
@@ -282,7 +268,7 @@ public class ContainerAppStep : IStep
         return this;
     }
 
-    public ContainerAppStep Repository(Func<IStep, IContainerRegistry> action)
+    public ContainerAppAbstractStep Repository(Func<AbstractStep, IContainerRegistry> action)
     {
         if (MainDsl.Verbose)
         {
@@ -292,32 +278,6 @@ public class ContainerAppStep : IStep
         _repository = action.Invoke(this).GetRepository();
         return this;
     }
-
-    public async Task RunAsync()
-    {
-        foreach (var action in _actions)
-        {
-            await action.Invoke();
-        }
-
-        await _parent.RunAsync();
-    }
-
-    public async Task SetupAsync()
-    {
-        await _parent.SetupAsync();
-    }
-
-    public async Task TearDownAsync()
-    {
-        await _parent.TearDownAsync();
-    }
-
-    public T Get<T>(string key)
-    {
-        return MainDsl.Get<T>(key);
-    }
-
 
     private void ValidateStep()
     {

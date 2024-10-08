@@ -1,46 +1,39 @@
-﻿using System.Linq.Expressions;
+﻿namespace IntegrateMe.Core;
 
-namespace IntegrateMe.Core;
-
-public class Dsl : IStep
+public class Dsl(AbstractStep parent) : AbstractStep(parent)
 {
-    public Dictionary<string, IStep> Entities { get; set; } = new();
-    public List<Expression> Expressions { get; } = [];
+    public Dictionary<string, AbstractStep> Entities { get; set; } = new();
+    private readonly List<Func<Task>> _setups = [];
+    private readonly List<Func<Task>> _actions = [];
+    private readonly List<Func<Task>> _tearDowns = [];
     public bool Verbose { get; private set; }
-    public Dsl MainDsl => this;
 
-    public IStep When()
-    {
-        return this;
-    }
-
-    public IStep Then()
-    {
-        return this;
-    }
-
-    public IStep VerboseOutput(bool value = true)
+    public Dsl VerboseOutput(bool value = true)
     {
         Verbose = value;
+
         return this;
     }
 
-    public async Task RunAsync()
+    public new async Task RunAsync()
+    {
+        foreach (var action in _actions)
+        {
+            await action();
+        }
+    }
+
+    public new async Task SetupAsync()
     {
         await Task.CompletedTask;
     }
 
-    public async Task SetupAsync()
+    public new async Task TearDownAsync()
     {
         await Task.CompletedTask;
     }
 
-    public async Task TearDownAsync()
-    {
-        await Task.CompletedTask;
-    }
-
-    public T Get<T>(string key)
+    public new T Get<T>(string key) where T : AbstractStep
     {
         if (Entities.TryGetValue(key, out var value))
         {
@@ -55,8 +48,18 @@ public class Dsl : IStep
         await Task.CompletedTask;
     }
 
-    public void AddExpression(Expression expression)
+    public void AddSetup(Func<Task> action)
     {
-        Expressions.Add(expression);
+        _setups.Add(action);
+    }
+
+    public void AddAction(Func<Task> action)
+    {
+        _actions.Add(action);
+    }
+
+    public void AddTearDown(Func<Task> action)
+    {
+        _tearDowns.Add(action);
     }
 }

@@ -4,12 +4,12 @@ namespace IntegrateMe.Azure.BlobStorage;
 
 public static class BlobStorageContext
 {
-    public static BlobStorageStep BlobStorage(this IStep parent, string? name = null)
+    public static BlobStorageAbstractStep BlobStorage(this AbstractStep parent, string? name = null)
     {
-        if (name == null) return new BlobStorageStep(parent);
+        if (name == null) return new BlobStorageAbstractStep(parent);
         if (parent.MainDsl.Entities.TryGetValue(name, out var step))
         {
-            if (step is not BlobStorageStep storageStep)
+            if (step is not BlobStorageAbstractStep storageStep)
             {
                 throw new InvalidOperationException();
             }
@@ -17,7 +17,7 @@ public static class BlobStorageContext
             return storageStep;
         }
 
-        var next = new BlobStorageStep(parent);
+        var next = new BlobStorageAbstractStep(parent);
         parent.MainDsl.Entities.Add(name, next);
         return next;
     }
