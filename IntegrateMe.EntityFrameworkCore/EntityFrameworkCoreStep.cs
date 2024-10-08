@@ -13,6 +13,11 @@ public class EntityFrameworkCoreStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
+    public string? ConnectionString()
+    {
+        return _dbContext?.Database.GetConnectionString();
+    }
+
     public EntityFrameworkCoreStep Custom(Func<DbContext, Task> action)
     {
         if (_dbContext == null)
