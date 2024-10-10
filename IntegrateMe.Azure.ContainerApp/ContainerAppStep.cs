@@ -3,6 +3,7 @@ using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager;
 using Azure.ResourceManager.AppContainers;
+using Azure.ResourceManager.AppContainers.Models;
 using Azure.ResourceManager.Resources;
 using IntegrateMe.Core;
 
@@ -217,6 +218,26 @@ public class ContainerAppStep(AbstractStep parent) : AbstractStep(parent)
             if (MainDsl.Verbose)
             {
                 Console.WriteLine($"[{DateTime.Now}] Container app stopped");
+            }
+        });
+
+
+        return this;
+    }
+
+    public ContainerAppStep HasProvisioningState(ContainerAppProvisioningState state)
+    {
+        MainDsl.AddAction(async () =>
+        {
+            var subscription =
+                _armClient.GetSubscriptionResource(new ResourceIdentifier($"/subscriptions/{_subscriptionId}"));
+            ResourceGroupCollection resourceGroups = subscription.GetResourceGroups();
+            ResourceGroupResource resourceGroup = await resourceGroups.GetAsync(_resourceGroup);
+            ContainerAppResource containerApp = await resourceGroup.GetContainerAppAsync(_name);
+
+            if (containerApp.Data.ProvisioningState.Value != state)
+            {
+                throw new Exception("Provisioning state does not match");
             }
         });
 

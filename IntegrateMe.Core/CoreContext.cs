@@ -4,7 +4,9 @@ public static class CoreContext
 {
     public static Dsl Given()
     {
-        return new Dsl(null!);
+        var dsl = new Dsl(null!);
+        dsl.MainDsl = dsl;
+        return dsl;
     }
 
     public static AbstractStep Parallel(this AbstractStep abstractStep, Action<AbstractStep> action1,

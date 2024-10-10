@@ -1,7 +1,11 @@
 ﻿namespace IntegrateMe.Core;
 
-public class Dsl(AbstractStep parent) : AbstractStep(parent)
+public class Dsl : AbstractStep
 {
+    public Dsl(AbstractStep parent) : base(parent)
+    {
+    }
+
     public Dictionary<string, AbstractStep> Entities { get; set; } = new();
     private readonly List<Func<Task>> _setups = [];
     private readonly List<Func<Task>> _actions = [];

@@ -1,8 +1,22 @@
 ﻿namespace IntegrateMe.Core;
 
-public abstract class AbstractStep(AbstractStep parent)
+public abstract class AbstractStep
 {
-    public Dsl MainDsl => parent.MainDsl;
+    private readonly AbstractStep _parent;
+    public Dsl MainDsl { get; set; } = null!;
+
+    protected AbstractStep(AbstractStep? parent)
+    {
+        if (parent == null)
+        {
+            _parent = this;
+        }
+        else
+        {
+            _parent = parent;
+            MainDsl = parent.MainDsl;
+        }
+    }
 
     public AbstractStep When()
     {
