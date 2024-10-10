@@ -7,13 +7,13 @@ databases, without getting bogged down by complex async code.
 This framework allows you to focus on what matters: validating your integrations.
 
 # Table of Contents
+
 - [Get Started](#get-started)
   - [Installation](#installation)
 - [Writing Tests](#writing-tests)
 - [Capabilities](#capabilities)
 - [Limitations](#limitations)
-- [Examples](#examples)
-  -[Azure Blob Storage](#azure-blob-storage)
+- [Examples](#examples) -[Azure Blob Storage](#azure-blob-storage)
   - [Azure Container Apps](#azure-container-apps)
   - [Azure Container Registry](#azure-container-registry)
   - [Azure Logic Apps](#azure-logic-apps)
@@ -51,6 +51,23 @@ For Entity Framework Core:
 
 ## Writing Tests
 
+```c#
+[Fact]
+public async Task UploadBlobWithConnectionString()
+{
+    await Given()
+        .BlobStorage("Storage")
+        .ConnectionString("UseDevelopmentStorage=true")
+        .When()
+        .BlobStorage("Storage")
+        .UploadBlob("test.txt", "Hello World")
+        .Then()
+        .BlobStorage("Storage")
+        .BlobExists("test.txt")
+        .RunAsync();
+}
+```
+
 ## Capabilities
 
 ## Limitations
@@ -58,4 +75,3 @@ For Entity Framework Core:
 ## Examples
 
 ## Alternative Applications of IntegrateMe
-
