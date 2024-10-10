@@ -1,0 +1,1 @@
+# IntegrateMe.Azure Example Project for xUnit

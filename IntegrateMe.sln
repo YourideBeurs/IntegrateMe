@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrateMe.Azure.xUnit.Exa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79A1B3B8-EB65-4A6C-AEFF-007D4C147C05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrateMe.EntityFrameworkCore.xUnit.Example", "IntegrateMe.EntityFrameworkCore.xUnit.Example\IntegrateMe.EntityFrameworkCore.xUnit.Example.csproj", "{CA1546FA-B63F-4C98-80AE-1206402E4A74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{67D943D9-097A-4486-84E9-186E8F2F870F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67D943D9-097A-4486-84E9-186E8F2F870F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67D943D9-097A-4486-84E9-186E8F2F870F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1546FA-B63F-4C98-80AE-1206402E4A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1546FA-B63F-4C98-80AE-1206402E4A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1546FA-B63F-4C98-80AE-1206402E4A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1546FA-B63F-4C98-80AE-1206402E4A74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,5 +76,6 @@ Global
 		{9CE046DE-DB47-42C0-AC5C-51CB327D9272} = {79A1B3B8-EB65-4A6C-AEFF-007D4C147C05}
 		{45AD86C0-81D1-4D22-9C80-391FA8142E1F} = {79A1B3B8-EB65-4A6C-AEFF-007D4C147C05}
 		{8FBDE887-17AE-475B-B03F-4B7190523520} = {79A1B3B8-EB65-4A6C-AEFF-007D4C147C05}
+		{CA1546FA-B63F-4C98-80AE-1206402E4A74} = {545099EF-0D2E-46CF-9383-2A1A846D46B4}
 	EndGlobalSection
 EndGlobal

@@ -13,7 +13,7 @@ public class EntityFrameworkCoreStep(AbstractStep parent) : AbstractStep(parent)
         return this;
     }
 
-    public string? ConnectionString()
+    public string? GetConnectionString()
     {
         return _dbContext?.Database.GetConnectionString();
     }
@@ -26,6 +26,21 @@ public class EntityFrameworkCoreStep(AbstractStep parent) : AbstractStep(parent)
         }
 
         MainDsl.AddAction(async () => await action.Invoke(_dbContext));
+        return this;
+    }
+
+    public EntityFrameworkCoreStep Custom(Action<DbContext> action)
+    {
+        if (_dbContext == null)
+        {
+            throw new InvalidOperationException("DbContext is not set");
+        }
+
+        MainDsl.AddAction(() =>
+        {
+            action.Invoke(_dbContext);
+            return Task.CompletedTask;
+        });
         return this;
     }
 
