@@ -1,15 +1,14 @@
-﻿namespace IntegrateMe.Core;
+﻿using IntegrateMe.Core.Logging;
 
-public class Dsl : AbstractStep
+namespace IntegrateMe.Core;
+
+public class Dsl(AbstractStep parent) : AbstractStep(parent)
 {
-    public Dsl(AbstractStep parent) : base(parent)
-    {
-    }
-
     public Dictionary<string, AbstractStep> Entities { get; set; } = new();
     private readonly List<Func<Task>> _setups = [];
     private readonly List<Func<Task>> _actions = [];
     private readonly List<Func<Task>> _tearDowns = [];
+    public ILogHandler? LogHandler { get; set; }
     public bool Verbose { get; private set; }
 
     public Dsl VerboseOutput(bool value = true)
@@ -21,6 +20,7 @@ public class Dsl : AbstractStep
 
     public new async Task RunAsync()
     {
+        LogHandler?.WriteLine("Running setup");
         foreach (var action in _actions)
         {
             await action();
