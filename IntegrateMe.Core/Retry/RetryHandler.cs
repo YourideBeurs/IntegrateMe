@@ -2,8 +2,8 @@
 
 public class RetryHandler
 {
-    public int Delay { get; set; } = 0;
-    public int Iterations { get; set; } = 1;
+    public TimeSpan Delay { get; set; } = TimeSpan.Zero;
+    public int MaxRetries { get; set; } = 1;
     private bool _success;
 
     public static RetryHandler DefaultRetryHandler()
@@ -23,7 +23,7 @@ public class RetryHandler
 
     public async Task RunAsync(Func<Task> task)
     {
-        for (var i = 0; i < Iterations; i++)
+        for (var i = 0; i < MaxRetries; i++)
         {
             await task();
             if (_success)

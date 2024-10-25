@@ -1,4 +1,5 @@
 ﻿using IntegrateMe.Azure.BlobStorage;
+using IntegrateMe.Core.Retry;
 
 namespace IntegrateMe.Azure.xUnit.Example.BlobStorageExamples;
 
@@ -40,6 +41,50 @@ public class UploadBlobExample
             .When()
             .BlobStorage("Storage")
             .UploadBlob("test.txt", "Hello World")
+            .Then()
+            .BlobStorage("Storage")
+            .BlobExists("test.txt")
+            .RunAsync();
+    }
+
+    [Fact]
+    public async Task UploadBlobWithConnectionStringWithRetry()
+    {
+        await Given()
+            .BlobStorage("Storage")
+            .ConnectionString("UseDevelopmentStorage=true")
+            .When()
+            .BlobStorage("Storage")
+            .UploadBlob(
+                blobName: "test.txt",
+                data: "Hello World",
+                retryHandler: new RetryHandler
+                {
+                    Delay = TimeSpan.FromSeconds(5),
+                    MaxRetries = 3,
+                })
+            .Then()
+            .BlobStorage("Storage")
+            .BlobExists("test.txt")
+            .RunAsync();
+    }
+
+    [Fact]
+    public async Task UploadBlobWithSASTokenWithRetry()
+    {
+        await Given()
+            .BlobStorage("Storage")
+            .SasToken("ThisIsMySasToken")
+            .When()
+            .BlobStorage("Storage")
+            .UploadBlob(
+                blobName: "test.txt",
+                data: "Hello World",
+                retryHandler: new RetryHandler
+                {
+                    Delay = TimeSpan.FromSeconds(5),
+                    MaxRetries = 3,
+                })
             .Then()
             .BlobStorage("Storage")
             .BlobExists("test.txt")

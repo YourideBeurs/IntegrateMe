@@ -96,6 +96,11 @@ public class BlobStorageStep(AbstractStep parent) : AbstractStep(parent)
         return BlobExists(blobName, exists, RetryHandler.DefaultRetryHandler());
     }
 
+    public BlobStorageStep BlobExists(string blobName, RetryHandler retryHandler)
+    {
+        return BlobExists(blobName, true, retryHandler);
+    }
+
     public BlobStorageStep BlobExists(string blobName, bool exists, RetryHandler retryHandler)
     {
         MainDsl.AddAction(async () =>

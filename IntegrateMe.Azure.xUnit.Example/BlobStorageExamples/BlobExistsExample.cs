@@ -3,53 +3,32 @@ using IntegrateMe.Core.Retry;
 
 namespace IntegrateMe.Azure.xUnit.Example.BlobStorageExamples;
 
-public class DeleteBlobExample
+public class BlobExistsExample
 {
     [Fact]
-    public async Task DeletelobWithConnectionString()
+    public async Task BlobExists()
     {
         await Given()
             .BlobStorage("Storage")
             .ConnectionString("UseDevelopmentStorage=true")
+            .ContainerName("Container")
             .When()
             .BlobStorage("Storage")
-            .DeleteBlob("test.txt")
+            .UploadBlob("test.txt", "Hello, World!")
             .Then()
             .BlobStorage("Storage")
-            .BlobExists("test.txt", false)
+            .BlobExists("test.txt")
             .RunAsync();
     }
 
     [Fact]
-    public async Task DeleteBlobWithSASToken()
-    {
-        await Given()
-            .BlobStorage("Storage")
-            .SasToken("ThisIsMySasToken")
-            .When()
-            .BlobStorage("Storage")
-            .DeleteBlob("test.txt")
-            .Then()
-            .BlobStorage("Storage")
-            .BlobExists("test.txt", false)
-            .RunAsync();
-    }
-
-    [Fact]
-    public async Task DeletelobWithConnectionStringWithRetry()
+    public async Task BlobDoesNotExist()
     {
         await Given()
             .BlobStorage("Storage")
             .ConnectionString("UseDevelopmentStorage=true")
+            .ContainerName("Container")
             .When()
-            .BlobStorage("Storage")
-            .DeleteBlob(
-                blobName: "test.txt",
-                retryHandler: new RetryHandler
-                {
-                    MaxRetries = 3,
-                    Delay = TimeSpan.FromSeconds(1),
-                })
             .Then()
             .BlobStorage("Storage")
             .BlobExists("test.txt", false)
@@ -57,23 +36,45 @@ public class DeleteBlobExample
     }
 
     [Fact]
-    public async Task DeleteBlobWithSASTokenWithRetry()
+    public async Task BlobExistsWithRetry()
     {
         await Given()
             .BlobStorage("Storage")
-            .SasToken("ThisIsMySasToken")
+            .ConnectionString("UseDevelopmentStorage=true")
+            .ContainerName("Container")
             .When()
             .BlobStorage("Storage")
-            .DeleteBlob(
+            .UploadBlob("test.txt", "Hello, World!")
+            .Then()
+            .BlobStorage("Storage")
+            .BlobExists(
                 blobName: "test.txt",
                 retryHandler: new RetryHandler
                 {
+                    Delay = TimeSpan.FromSeconds(5),
                     MaxRetries = 3,
-                    Delay = TimeSpan.FromSeconds(1),
                 })
+            .RunAsync();
+    }
+
+    [Fact]
+    public async Task BlobDoesNotExistWithRetry()
+    {
+        await Given()
+            .BlobStorage("Storage")
+            .ConnectionString("UseDevelopmentStorage=true")
+            .ContainerName("Container")
+            .When()
             .Then()
             .BlobStorage("Storage")
-            .BlobExists("test.txt", false)
+            .BlobExists(
+                blobName: "test.txt",
+                exists: false,
+                retryHandler: new RetryHandler
+                {
+                    Delay = TimeSpan.FromSeconds(5),
+                    MaxRetries = 3,
+                })
             .RunAsync();
     }
 }
