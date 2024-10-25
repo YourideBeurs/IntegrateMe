@@ -2,7 +2,7 @@
 
 namespace IntegrateMe.Azure.ContainerApp;
 
-public static class ContainerAppContext
+public static class ContainerAppExtensions
 {
     public static ContainerAppStep ContainerApp(this AbstractStep parent, string? name = null)
     {

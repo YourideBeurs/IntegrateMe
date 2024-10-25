@@ -2,7 +2,7 @@
 
 namespace IntegrateMe.Azure.LogicApp;
 
-public static class LogicAppContext
+public static class LogicAppExtensions
 {
     public static LogicAppStep LogicApp(this AbstractStep parent, string? name = null)
     {

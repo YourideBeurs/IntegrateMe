@@ -1,1 +1,1 @@
-﻿global using static IntegrateMe.Core.CoreContext;
+﻿global using static IntegrateMe.Core.CoreExtensions;

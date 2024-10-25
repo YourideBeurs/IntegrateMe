@@ -2,7 +2,7 @@
 
 namespace IntegrateMe.Azure.BlobStorage;
 
-public static class BlobStorageContext
+public static class BlobStorageExtensions
 {
     public static BlobStorageStep BlobStorage(this AbstractStep parent, string? name = null)
     {

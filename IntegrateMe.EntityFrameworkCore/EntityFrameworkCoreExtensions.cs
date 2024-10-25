@@ -2,7 +2,7 @@
 
 namespace IntegrateMe.EntityFramework.Core;
 
-public static class EntityFrameworkCoreContext
+public static class EntityFrameworkCoreExtensions
 {
     public static EntityFrameworkCoreStep EntityFramework(this AbstractStep parent, string? name = null)
     {

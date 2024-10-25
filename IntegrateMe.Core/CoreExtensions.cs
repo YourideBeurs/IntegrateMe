@@ -1,6 +1,6 @@
 ﻿namespace IntegrateMe.Core;
 
-public static class CoreContext
+public static class CoreExtensions
 {
     public static Dsl Given()
     {

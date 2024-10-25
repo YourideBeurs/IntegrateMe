@@ -2,7 +2,7 @@
 
 namespace IntegrateMe.Azure.ContainerRegistry;
 
-public static class ContainerRegistryContext
+public static class ContainerRegistryExtensions
 {
     public static ContainerRegistryStep ContainerRegistry(this AbstractStep parent, string? name = null)
     {
