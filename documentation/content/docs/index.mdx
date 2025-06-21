@@ -1,9 +1,30 @@
 ---
-title: Hello World
-description: Your first document
+title: Getting Started
+description: Your first integration test with IntegrateMe
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+```csharp
+public static class BlobStorageExtensionsAdd commentMore actions
+{
+    public static BlobStorageStep BlobStorage(this AbstractStep parent, string? name = null)
+    {
+        if (name == null) return new BlobStorageStep(parent);
+        if (parent.MainDsl.Entities.TryGetValue(name, out var step))
+        {
+            if (step is not BlobStorageStep storageStep)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return storageStep;
+        }
+
+        var next = new BlobStorageStep(parent);
+        parent.MainDsl.Entities.Add(name, next);
+        return next;
+    }
+}
+```
 
 ## What is Next?
 
