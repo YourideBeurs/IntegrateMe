@@ -5,8 +5,6 @@ VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrateMe.Core", "IntegrateMe.Core\IntegrateMe.Core.csproj", "{45AD86C0-81D1-4D22-9C80-391FA8142E1F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{79A1B3B8-EB65-4A6C-AEFF-007D4C147C05}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrateMe.xUnit.Logger", "IntegrateMe.xUnit.Logger\IntegrateMe.xUnit.Logger.csproj", "{1CE9DD57-E2D6-43A1-8567-BFDACD195656}"
 EndProject
 Global
@@ -31,7 +29,5 @@ Global
 		SolutionGuid = {1A5B30C6-33A0-410C-9E84-C800B07B2B62}
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{45AD86C0-81D1-4D22-9C80-391FA8142E1F} = {79A1B3B8-EB65-4A6C-AEFF-007D4C147C05}
-		{1CE9DD57-E2D6-43A1-8567-BFDACD195656} = {79A1B3B8-EB65-4A6C-AEFF-007D4C147C05}
 	EndGlobalSection
 EndGlobal
